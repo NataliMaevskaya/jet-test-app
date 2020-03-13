@@ -25,7 +25,6 @@ export default class TopView extends JetView {
 		};
 
 		let ui = {
-			// type: "clean",
 			paddingX: 5,
 			css: "app_layout",
 			rows: [
@@ -62,7 +61,6 @@ export default class TopView extends JetView {
 				this.$$("topHeader").setValues({menuItem});
 			}
 		});
-		// this.topMenu.select("contacts");
 	}
 
 	urlChange(view, url) {
