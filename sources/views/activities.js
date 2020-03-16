@@ -43,7 +43,12 @@ export default class ActivitiesView extends JetView {
 			{
 				id: "DueDate",
 				header: ["Due date", {
-					content: "datepickerFilter"
+					content: "datepickerFilter",
+					compare(value, filter) {
+						value = webix.i18n.dateFormatStr(value);
+						filter = webix.i18n.dateFormatStr(filter);
+						return value === filter;
+					}
 				}],
 				format: webix.i18n.longDateFormatStr,
 				sort: "date",

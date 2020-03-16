@@ -1,6 +1,4 @@
 import {JetView} from "webix-jet";
-import {contacts} from "../../models/contacts";
-import {statuses} from "../../models/statuses";
 
 export default class ContactsTemplateView extends JetView {
 	config() {
@@ -9,11 +7,11 @@ export default class ContactsTemplateView extends JetView {
 			paddingX: 100,
 			margin: 20,
 			template: obj => `<div class="header_contact">
-									<h1>${obj.FirstName || "No name"} ${obj.LastName || "No surname"}</h1>
+									<h1>${obj.FirstName || " - "} ${obj.LastName || " - "}</h1>
 								</div>
 								<div class="info_contact">
 									<div class="photo_contact">
-										<img src="${obj.Photo || ""}" width="10%" height="10%" alt="Photo here" border="1px solid black"/>
+										<img src="${obj.Photo || "sources/images/avatar_default.png"}"/>
 										<p class="status_contact">${obj.Status || " - "}</p>
 									</div>
 									<div class="detailed_info_contact">
@@ -74,37 +72,6 @@ export default class ContactsTemplateView extends JetView {
 		this.contactsTemplate = this.$$("contactsTemplate");
 		this.on(this.app, "onChangeUsersListUrl", (item) => {
 			this.contactsTemplate.setValues(item);
-		});
-	}
-
-	getStatusName(statusId) {
-		let statusName;
-		if (statusId && statuses.exists(statusId)) {
-			webix.promise.all([
-				statuses.waitData
-			]).then(() => {
-				statusName = statuses.getItem(statusId).Value;
-			});
-		}
-		else {
-			statusName = " - ";
-		}
-		return statusName;
-	}
-
-	urlChange(view, url) {
-		webix.promise.all([
-			contacts.waitData,
-			statuses.waitData
-		]).then(() => {
-			const urlId = url[0].params.id;
-			if (urlId && contacts.exists(urlId)) {
-				const contactInfo = contacts.getItem(urlId);
-				const contactStatusId = contactInfo.StatusID;
-
-				contactInfo.Status = this.getStatusName(contactStatusId);
-				this.contactsTemplate.setValues(contactInfo);
-			}
 		});
 	}
 }

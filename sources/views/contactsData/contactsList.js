@@ -11,7 +11,7 @@ export default class ContactsListView extends JetView {
 					localId: "contactsList",
 					width: 300,
 					type: {
-						height: 40
+						height: "auto"
 					},
 					template: obj => `
 									<div class="contact">
@@ -20,9 +20,9 @@ export default class ContactsListView extends JetView {
 										</div>
 										<div class="contact_details">
 											<div class="contact_details_div">
-												<b>${obj.FirstName || "No name"} ${obj.LastName || "No surname"}</b>
+												<b>${obj.FirstName || " - "} ${obj.LastName || " - "}</b>
 											</div>
-											<small class="contact_details_div">${obj.Company}</small>
+											<small class="contact_details_div">${obj.Company || " - "}</small>
 										</div>
 									</div>`,
 					select: true,
@@ -30,7 +30,13 @@ export default class ContactsListView extends JetView {
 					on: {
 						onAfterSelect: (id) => {
 							this.setParamToUrl(id);
-							this.app.callEvent("onChangeUsersListUrl", [contacts.getItem(id)]);
+							let contactInfo = contacts.getItem(id);
+							const contactStatusId = contactInfo.StatusID;
+							const item = statuses.getItem(contactStatusId);
+							if (contactStatusId && item) {
+								contactInfo.Status = statuses.getItem(contactStatusId).Value;
+							}
+							this.app.callEvent("onChangeUsersListUrl", [contactInfo]);
 						}
 					}
 				}
@@ -38,15 +44,15 @@ export default class ContactsListView extends JetView {
 		};
 	}
 
-	init() {
+	init(url) {
 		this.list = this.$$("contactsList");
 		webix.promise.all([
 			contacts.waitData,
 			statuses.waitData
 		]).then(() => {
 			this.list.sync(contacts);
-			let id = this.getParam("id");
-			if (!id || !contacts.exists(id)) {
+			let id = url[0].params.id;
+			if (!id) {
 				id = contacts.getFirstId();
 			}
 			this.list.select(id);
@@ -57,11 +63,32 @@ export default class ContactsListView extends JetView {
 		this.setParam("id", id, true);
 	}
 
-	urlChange(view, url) {
-		const urlId = url[0].params.id;
-
-		if (urlId && this.list.exists(urlId)) {
-			this.list.select(urlId);
+	getStatusName(statusId) {
+		let statusName;
+		if (statusId && statuses.exists(statusId)) {
+			statuses.waitData.then(() => {
+				statusName = statuses.getItem(statusId).Value;
+			});
 		}
+		else {
+			statusName = " - ";
+		}
+		return statusName;
+	}
+
+	urlChange(view, url) {
+		webix.promise.all([
+			contacts.waitData,
+			statuses.waitData
+		]).then(() => {
+			const urlId = url[0].params.id;
+
+			if (urlId && this.list.exists(urlId)) {
+				this.list.select(urlId);
+			}
+			else {
+				this.list.select(contacts.getFirstId());
+			}
+		});
 	}
 }
