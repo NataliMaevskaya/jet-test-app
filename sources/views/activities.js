@@ -117,13 +117,7 @@ export default class ActivitiesView extends JetView {
 	init() {
 		this.activitiesTable = this.$$("activitiesTable");
 		this.activityWindow = this.ui(bodyActivityWindow);
-		webix.promise.all([
-			activities.waitData,
-			activityTypes.waitData,
-			contacts.waitData
-		]).then(() => {
-			this.activitiesTable.sync(activities);
-		});
+		this.activitiesTable.sync(activities);
 	}
 
 	showActivityEditWindow(id) {

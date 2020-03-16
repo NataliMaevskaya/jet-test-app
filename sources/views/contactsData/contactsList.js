@@ -46,11 +46,11 @@ export default class ContactsListView extends JetView {
 
 	init(url) {
 		this.list = this.$$("contactsList");
+		this.list.sync(contacts);
 		webix.promise.all([
 			contacts.waitData,
 			statuses.waitData
 		]).then(() => {
-			this.list.sync(contacts);
 			let id = url[0].params.id;
 			if (!id) {
 				id = contacts.getFirstId();
