@@ -55,7 +55,7 @@ export default class ActivityWindowView extends JetView {
 							{
 								view: "datepicker",
 								label: "Time",
-								name: "Time",
+								name: "DueTime",
 								type: "time",
 								format: webix.i18n.timeFormat,
 								invalidMessage: "Select time"
@@ -125,6 +125,8 @@ export default class ActivityWindowView extends JetView {
 		activities.waitSave(() => {
 			if (this.bodyActivityWindow.validate()) {
 				const values = this.bodyActivityWindow.getValues();
+				values.DueDate.setHours(values.DueTime.getHours(), values.DueTime.getMinutes());
+
 				if (values && values.id) {
 					activities.updateItem(values.id, values);
 				}

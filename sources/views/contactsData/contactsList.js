@@ -29,7 +29,7 @@ export default class ContactsListView extends JetView {
 					scroll: "y",
 					on: {
 						onAfterSelect: (id) => {
-							this.setParamToUrl(id);
+							this.setParam("id", id, true);
 							let contactInfo = contacts.getItem(id);
 							const contactStatusId = contactInfo.StatusID;
 							const item = statuses.getItem(contactStatusId);
@@ -59,32 +59,14 @@ export default class ContactsListView extends JetView {
 		});
 	}
 
-	setParamToUrl(id) {
-		this.setParam("id", id, true);
-	}
-
-	getStatusName(statusId) {
-		let statusName;
-		if (statusId && statuses.exists(statusId)) {
-			statuses.waitData.then(() => {
-				statusName = statuses.getItem(statusId).Value;
-			});
-		}
-		else {
-			statusName = " - ";
-		}
-		return statusName;
-	}
-
 	urlChange() {
 		webix.promise.all([
 			contacts.waitData,
 			statuses.waitData
 		]).then(() => {
-			const urlId = this.getParam("id");
-
-			if (urlId && this.list.exists(urlId)) {
-				this.list.select(urlId);
+			const id = this.getParam("id");
+			if (id && this.list.exists(id)) {
+				this.list.select(id);
 			}
 			else {
 				this.list.select(contacts.getFirstId());
