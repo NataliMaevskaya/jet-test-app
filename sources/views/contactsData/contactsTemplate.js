@@ -30,6 +30,7 @@ export default class ContactsTemplateView extends JetView {
 		const contactButtons = {
 			padding: 20,
 			css: "white_bgc",
+			margin: 5,
 			rows: [
 				{
 					cols: [
@@ -41,7 +42,6 @@ export default class ContactsTemplateView extends JetView {
 							width: 90,
 							disabled: true
 						},
-						{width: 5},
 						{
 							view: "button",
 							label: "Edit",

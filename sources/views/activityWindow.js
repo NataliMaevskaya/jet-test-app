@@ -8,7 +8,6 @@ export default class ActivityWindowView extends JetView {
 		return {
 			view: "window",
 			localId: "activityWindow",
-			width: 1000,
 			height: 500,
 			position: "center",
 			head: {

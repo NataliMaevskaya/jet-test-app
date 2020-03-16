@@ -16,7 +16,7 @@ export default class ActivitiesView extends JetView {
 					type: "icon",
 					icon: "mdi mdi-plus-box",
 					label: "Add activity",
-					click: () => this.showActivityAddWindow()
+					click: () => this.showActivityEditOrAddWindow()
 				}
 			]
 		};
@@ -95,7 +95,7 @@ export default class ActivitiesView extends JetView {
 			sort: "multi",
 			columns: tableColumns,
 			onClick: {
-				"mdi-pencil-box-outline": (e, id) => this.showActivityEditWindow(id),
+				"mdi-pencil-box-outline": (e, id) => this.showActivityEditOrAddWindow(id),
 				"wxi-trash": (e, id) => {
 					webix.confirm({
 						text: "Record will be deleted permanently! Continue?"
@@ -120,13 +120,12 @@ export default class ActivitiesView extends JetView {
 		this.activitiesTable.sync(activities);
 	}
 
-	showActivityEditWindow(id) {
+	showActivityEditOrAddWindow(id) {
 		if (id) {
 			this.activityWindow.showWindow(id);
 		}
-	}
-
-	showActivityAddWindow() {
-		this.activityWindow.showWindow(false);
+		else {
+			this.activityWindow.showWindow(false);
+		}
 	}
 }

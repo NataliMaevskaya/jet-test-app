@@ -44,14 +44,14 @@ export default class ContactsListView extends JetView {
 		};
 	}
 
-	init(url) {
+	init() {
 		this.list = this.$$("contactsList");
 		this.list.sync(contacts);
 		webix.promise.all([
 			contacts.waitData,
 			statuses.waitData
 		]).then(() => {
-			let id = url[0].params.id;
+			let id = this.getParam("id");
 			if (!id) {
 				id = contacts.getFirstId();
 			}
@@ -76,12 +76,12 @@ export default class ContactsListView extends JetView {
 		return statusName;
 	}
 
-	urlChange(view, url) {
+	urlChange() {
 		webix.promise.all([
 			contacts.waitData,
 			statuses.waitData
 		]).then(() => {
-			const urlId = url[0].params.id;
+			const urlId = this.getParam("id");
 
 			if (urlId && this.list.exists(urlId)) {
 				this.list.select(urlId);
