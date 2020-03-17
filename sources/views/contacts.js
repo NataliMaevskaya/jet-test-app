@@ -12,4 +12,10 @@ export default class ContactsView extends JetView {
 		};
 		return contactsView;
 	}
+
+	init() {
+		this.on(this.app, "onChangeUrl", (id) => {
+			this.setParam("id", id, true);
+		});
+	}
 }

@@ -29,7 +29,6 @@ export default class ContactsListView extends JetView {
 					scroll: "y",
 					on: {
 						onAfterSelect: (id) => {
-							this.setParam("id", id, true);
 							let contactInfo = contacts.getItem(id);
 							const contactStatusId = contactInfo.StatusID;
 							const item = statuses.getItem(contactStatusId);
@@ -37,6 +36,7 @@ export default class ContactsListView extends JetView {
 								contactInfo.Status = statuses.getItem(contactStatusId).Value;
 							}
 							this.app.callEvent("onChangeUsersListUrl", [contactInfo]);
+							this.app.callEvent("onChangeUrl", [id]);
 						}
 					}
 				}

@@ -108,7 +108,7 @@ export default class ActivityWindowView extends JetView {
 
 		if (id && activities.exists(id)) {
 			const item = activities.getItem(id);
-
+			item.DueTime = item.DueDate;
 			this.bodyActivityWindow.setValues(item);
 		}
 		this.getRoot().show();

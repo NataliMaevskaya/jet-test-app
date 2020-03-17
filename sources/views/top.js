@@ -62,10 +62,4 @@ export default class TopView extends JetView {
 			}
 		});
 	}
-
-	urlChange(view, url) {
-		if (url[1] && url[1].page) {
-			this.topMenu.select(url[1].page);
-		}
-	}
 }
