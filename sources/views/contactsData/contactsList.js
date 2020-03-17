@@ -29,14 +29,13 @@ export default class ContactsListView extends JetView {
 					scroll: "y",
 					on: {
 						onAfterSelect: (id) => {
-							let contactInfo = contacts.getItem(id);
+							let contactInfo = webix.copy(contacts.getItem(id));
 							const contactStatusId = contactInfo.StatusID;
 							const item = statuses.getItem(contactStatusId);
 							if (contactStatusId && item) {
 								contactInfo.Status = statuses.getItem(contactStatusId).Value;
 							}
-							this.app.callEvent("onChangeUsersListUrl", [contactInfo]);
-							this.app.callEvent("onChangeUrl", [id]);
+							this.app.callEvent("onContactSelect", [contactInfo]);
 						}
 					}
 				}
@@ -47,6 +46,9 @@ export default class ContactsListView extends JetView {
 	init() {
 		this.list = this.$$("contactsList");
 		this.list.sync(contacts);
+	}
+
+	urlChange() {
 		webix.promise.all([
 			contacts.waitData,
 			statuses.waitData
@@ -56,21 +58,6 @@ export default class ContactsListView extends JetView {
 				id = contacts.getFirstId();
 			}
 			this.list.select(id);
-		});
-	}
-
-	urlChange() {
-		webix.promise.all([
-			contacts.waitData,
-			statuses.waitData
-		]).then(() => {
-			const id = this.getParam("id");
-			if (id && this.list.exists(id)) {
-				this.list.select(id);
-			}
-			else {
-				this.list.select(contacts.getFirstId());
-			}
 		});
 	}
 }

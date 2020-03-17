@@ -70,8 +70,8 @@ export default class ContactsTemplateView extends JetView {
 
 	init() {
 		this.contactsTemplate = this.$$("contactsTemplate");
-		this.on(this.app, "onChangeUsersListUrl", (item) => {
-			this.contactsTemplate.setValues(item);
+		this.on(this.app, "onContactSelect", (contact) => {
+			this.contactsTemplate.setValues(contact);
 		});
 	}
 }

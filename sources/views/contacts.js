@@ -14,8 +14,8 @@ export default class ContactsView extends JetView {
 	}
 
 	init() {
-		this.on(this.app, "onChangeUrl", (id) => {
-			this.setParam("id", id, true);
+		this.on(this.app, "onContactSelect", (contact) => {
+			this.setParam("id", contact.id, true);
 		});
 	}
 }
