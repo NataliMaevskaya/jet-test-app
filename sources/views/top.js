@@ -13,7 +13,7 @@ export default class TopView extends JetView {
 			view: "menu",
 			id: "top:menu",
 			css: "app_menu",
-			width: 180,
+			width: 100,
 			layout: "y",
 			select: true,
 			template: "<span class='webix_icon #icon#'></span> #value# ",
@@ -37,8 +37,8 @@ export default class TopView extends JetView {
 						},
 						{
 							type: "wide",
-							paddingY: 10,
-							paddingX: 5,
+							paddingY: 1,
+							paddingX: 1,
 							rows: [
 								{$subview: true}
 							]
