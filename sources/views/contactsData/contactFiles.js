@@ -1,9 +1,5 @@
 import {JetView} from "webix-jet";
-// import {activities} from "../models/activities";
-// import {activityTypes} from "../models/activityTypes";
-// import {contacts} from "../../models/contacts";
 import {contactFiles} from "../../models/contactFiles";
-// import bodyActivityWindow from "./activityWindow";
 
 export default class ContactFilesView extends JetView {
 	config() {

@@ -50,7 +50,6 @@ export default class ContactsTemplateView extends JetView {
 							icon: "wxi-trash",
 							width: 90,
 							click: () => this.deleteContact()
-							// disabled: true
 						},
 						{
 							view: "button",
@@ -59,7 +58,6 @@ export default class ContactsTemplateView extends JetView {
 							icon: "mdi mdi-pencil-box-outline",
 							width: 90,
 							click: () => this.editContact()
-							// disabled: true
 						}
 					]
 				},
@@ -90,7 +88,6 @@ export default class ContactsTemplateView extends JetView {
 
 		const segmentedCells = {
 			animate: false,
-			// css: "white_bgc",
 			cells: [
 				{
 					localId: "segmentedActivities",
@@ -105,7 +102,6 @@ export default class ContactsTemplateView extends JetView {
 		};
 
 		return {
-			// borderless: false,
 			css: "white_bgc",
 			rows: [
 				{
@@ -135,44 +131,33 @@ export default class ContactsTemplateView extends JetView {
 		webix.confirm({
 			text: "Contact's info and all related activities will be deleted permanently! Continue?"
 		}).then(() => {
-			const contactId = this.getParam("id", true);
-			debugger;
-			const activitiesToDelete = activities.find(activity => activity.ContactID.toString() === contactId.toString());
+			const contactId = this.getParam("id", true).toString();
+			const actsToDelete = activities.find(act => act.ContactID.toString() === contactId);
 
 			contacts.waitSave(() => {
 				contacts.remove(contactId);
-				if (activitiesToDelete) {
-					activitiesToDelete.forEach((activity) => {
+				if (actsToDelete) {
+					actsToDelete.forEach((activity) => {
 						activities.remove(activity.id);
 					});
 				}
 			})
 				.then(() => {
-					// debugger
 					webix.message("All info of the contact is deleted");
 					const firstId = contacts.getFirstId();
-					// console.log(firstId);
 					this.show(`/top/contacts?id=${firstId}/contactsData.contactsTemplate`);
 				});
 		});
 	}
 
 	urlChange() {
-		// this.on(this.app, "onContactSelect", (contact) => {
-		// const contactId = this.getParam("id", true);
-
-		// debugger;
 		webix.promise.all([
 			contacts.waitData,
 			activities.waitData,
 			activityTypes.waitData
 		]).then(() => {
 			const contactId = this.getParam("id", true).toString();
-			// // const contactId = contact.id;
-			// console.log(`activities: ${activities.data}`);
-
 			if (contactId && contacts.exists(contactId)) {
-				// debugger;
 				let contactInfo = webix.copy(contacts.getItem(contactId));
 				const contactStatusId = contactInfo.StatusID;
 				const item = statuses.getItem(contactStatusId);

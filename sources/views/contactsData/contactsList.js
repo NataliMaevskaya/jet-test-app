@@ -9,7 +9,7 @@ export default class ContactsListView extends JetView {
 				{
 					view: "list",
 					localId: "contactsList",
-					width: 100,
+					width: 250,
 					type: {
 						height: "auto"
 					},
@@ -29,11 +29,8 @@ export default class ContactsListView extends JetView {
 					scroll: "y",
 					on: {
 						onAfterSelect: (id) => {
-							// debugger;
 							this.setParam("id", id, true);
 							this.show("./contactsData.contactsTemplate");
-							// this.show(`/top/contacts?id=${id}/contactsData.contactsTemplate`);
-							// this.app.callEvent("onContactSelect", [id]);
 						}
 					}
 				},
@@ -44,8 +41,6 @@ export default class ContactsListView extends JetView {
 					type: "icon",
 					icon: "mdi mdi-plus-box",
 					css: "white_bgc",
-					// width: 250,
-					// align: "center",
 					click: () => this.addContact()
 				}
 			]
@@ -59,21 +54,15 @@ export default class ContactsListView extends JetView {
 			contacts.waitData,
 			statuses.waitData
 		]).then(() => {
-			// debugger;
 			let id = this.getParam("id", true);
 			if (!id) {
 				id = contacts.getFirstId();
 			}
-			// this.show("./contactsData.contactsTemplate");
-			console.log(id);
-			// debugger
 			this.list.select(id);
-			// this.show(`./contacts?id=${id}/contactsData.contactsTemplate`); бесконечный цикл//
 		});
 	}
 
 	addContact() {
-		// debugger
 		this.list.unselectAll();
 		this.show("/top/contacts/contactsData.contactForm");
 	}

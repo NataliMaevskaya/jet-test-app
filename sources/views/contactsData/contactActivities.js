@@ -1,7 +1,6 @@
 import {JetView} from "webix-jet";
 import {activities} from "../../models/activities";
 import {activityTypes} from "../../models/activityTypes";
-// import {contacts} from "../../models/contacts";
 import bodyActivityWindow from "../activityWindow";
 
 export default class ContactActivitiesView extends JetView {
@@ -111,7 +110,6 @@ export default class ContactActivitiesView extends JetView {
 	}
 
 	showActivityEditOrAddWindow(activityId) {
-		// debugger
 		const contactId = this.getParam("id", true);
 		if (activityId) {
 			this.activityWindow.showWindow(activityId, contactId); // edit the activity of the contact

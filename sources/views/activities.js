@@ -129,7 +129,6 @@ export default class ActivitiesView extends JetView {
 	}
 
 	showActivityEditOrAddWindow(activityId) {
-		// debugger
 		if (activityId) {
 			this.activityWindow.showWindow(activityId);
 		}

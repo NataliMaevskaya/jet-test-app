@@ -102,7 +102,6 @@ export default class ActivityWindowView extends JetView {
 	}
 
 	showWindow(activityId, contactId) {
-		// debugger
 		this.head = this.$$("headActivityWindow");
 		this.addSaveButton = this.$$("addSaveButton");
 
@@ -132,7 +131,6 @@ export default class ActivityWindowView extends JetView {
 
 	addSaveItem() {
 		activities.waitSave(() => {
-			// debugger
 			if (this.bodyActivityWindow.validate()) {
 				const values = this.bodyActivityWindow.getValues();
 				values.DueDate.setHours(values.DueTime.getHours(), values.DueTime.getMinutes());

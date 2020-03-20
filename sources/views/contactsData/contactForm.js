@@ -142,7 +142,6 @@ export default class contactFormView extends JetView {
 							width: 150,
 							on: {
 								onBeforeFileAdd: (item) => {
-									// debugger
 									const fileReader = new FileReader();
 									fileReader.readAsDataURL(item.file);
 									fileReader.onload = () => this.$$("contactPhoto").setValues({Photo: fileReader.result});
@@ -234,7 +233,6 @@ export default class contactFormView extends JetView {
 					this.contactForm.setValues(contactValues);
 					this.contactPhoto.setValues({Photo: contactValues.Photo});
 				});
-			// debugger;
 		}
 	}
 
@@ -242,7 +240,6 @@ export default class contactFormView extends JetView {
 		this.contactForm.clear();
 		this.contactForm.clearValidation();
 		this.setParam("id", id, true);
-		// this.contactForm.getParentView().getChildViews()[0];
 		this.show(`/top/contacts?id=${id}/contactsData.contactsTemplate`);
 	}
 
