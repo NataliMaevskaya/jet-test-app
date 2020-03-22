@@ -3,7 +3,7 @@ import {activities} from "../../models/activities";
 import {activityTypes} from "../../models/activityTypes";
 import {contacts} from "../../models/contacts";
 import {statuses} from "../../models/statuses";
-import {contactsFiles} from "../../models/contactFiles";
+import {contactsFiles} from "../../models/contactsFiles";
 
 import contactActivities from "./contactActivities";
 import contactFiles from "./contactFiles";
@@ -131,8 +131,14 @@ export default class ContactsTemplateView extends JetView {
 		webix.confirm({
 			text: "Contact's info and all related activities will be deleted permanently! Continue?"
 		}).then(() => {
-			const contactId = this.getParam("id", true).toString();
-			const actsToDelete = activities.find(act => act.ContactID.toString() === contactId);
+			const contactId = this.getParam("id", true);
+			let actsToDelete;
+			if (this.isNumber(contactId)) {
+				actsToDelete = activities.find(act => +act.ContactID === contactId);
+			}
+			else if (this.isString(contactId)) {
+				actsToDelete = activities.find(act => act.ContactID.toString() === contactId);
+			}
 
 			contacts.waitSave(() => {
 				contacts.remove(contactId);
@@ -145,6 +151,7 @@ export default class ContactsTemplateView extends JetView {
 				.then(() => {
 					webix.message("All info of the contact is deleted");
 					const firstId = contacts.getFirstId();
+					this.app.callEvent("onContactSelect", [{id: firstId}]);
 					this.show(`/top/contacts?id=${firstId}/contactsData.contactsTemplate`);
 				});
 		});
@@ -156,7 +163,8 @@ export default class ContactsTemplateView extends JetView {
 			activities.waitData,
 			activityTypes.waitData
 		]).then(() => {
-			const contactId = this.getParam("id", true).toString();
+			const contactId = this.getParam("id", true);
+
 			if (contactId && contacts.exists(contactId)) {
 				let contactInfo = webix.copy(contacts.getItem(contactId));
 				const contactStatusId = contactInfo.StatusID;
@@ -165,9 +173,26 @@ export default class ContactsTemplateView extends JetView {
 					contactInfo.Status = statuses.getItem(contactStatusId).Value;
 				}
 				this.contactsTemplate.setValues(contactInfo);
-				activities.data.filter(activity => activity.ContactID.toString() === contactId);
-				contactsFiles.data.filter(data => data.ContactID.toString() === contactId);
+
+				if (this.isNumber(contactId)) {
+					activities.data.filter(activity => +activity.ContactID === contactId);
+					contactsFiles.data.filter(data => +data.ContactID === contactId);
+				}
+				else if (this.isString(contactId)) {
+					activities.data.filter(activity => activity.ContactID.toString() === contactId);
+					contactsFiles.data.filter(data => data.ContactID.toString() === contactId);
+				}
 			}
 		});
+	}
+
+	isString(o) {
+		const condition = typeof o === "object" && o.constructor === String;
+		return typeof o === "string" || condition;
+	}
+
+	isNumber(o) {
+		const condition = typeof o === "object" && o.constructor === Number;
+		return typeof o === "number" || condition;
 	}
 }

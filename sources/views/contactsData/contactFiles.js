@@ -1,5 +1,5 @@
 import {JetView} from "webix-jet";
-import {contactFiles} from "../../models/contactFiles";
+import {contactsFiles} from "../../models/contactsFiles";
 
 export default class ContactFilesView extends JetView {
 	config() {
@@ -60,7 +60,7 @@ export default class ContactFilesView extends JetView {
 	}
 
 	init() {
-		this.$$("filesDatatable").sync(contactFiles);
+		this.$$("filesDatatable").sync(contactsFiles);
 		this.$$("uploadFile").attachEvent("onBeforeFileAdd", (file) => {
 			const id = this.getParam("id", true);
 			const fileInfo = {
@@ -69,14 +69,14 @@ export default class ContactFilesView extends JetView {
 				fileDate: file.file.lastModifiedDate,
 				size: file.sizetext
 			};
-			contactFiles.add(fileInfo);
+			contactsFiles.add(fileInfo);
 		});
 	}
 
 	urlChange() {
 		const id = this.getParam("id", true);
-		if (id && contactFiles) {
-			contactFiles.data.filter(file => file.ContactID.toString() === id.toString());
+		if (id && contactsFiles) {
+			contactsFiles.data.filter(file => file.ContactID.toString() === id.toString());
 		}
 	}
 
@@ -88,7 +88,7 @@ export default class ContactFilesView extends JetView {
 		webix.confirm({
 			text: "Record will be deleted permanently! Continue?"
 		}).then(() => {
-			contactFiles.remove(id);
+			contactsFiles.remove(id);
 		});
 	}
 }

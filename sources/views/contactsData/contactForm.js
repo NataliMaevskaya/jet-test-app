@@ -239,7 +239,6 @@ export default class contactFormView extends JetView {
 	cancelForm(id) {
 		this.contactForm.clear();
 		this.contactForm.clearValidation();
-		this.setParam("id", id, true);
 		this.show(`/top/contacts?id=${id}/contactsData.contactsTemplate`);
 	}
 
@@ -255,8 +254,9 @@ export default class contactFormView extends JetView {
 				}
 			}
 		})
-			.then((id) => {
-				this.cancelForm(id);
+			.then((res) => {
+				this.app.callEvent("onContactSelect", [res]);
+				this.cancelForm(res.id);
 			});
 	}
 
