@@ -36,9 +36,14 @@ export default class ContactFilesView extends JetView {
 					header: "Change date",
 					value: new Date(),
 					format: webix.i18n.longDateFormatStr,
+					fillspace: true,
 					sort: "date"
 				},
-				{id: "size", header: "Size", sort: this.sortBySize},
+				{
+					id: "size",
+					header: "Size",
+					sort: this.sortBySize.bind(this)
+				},
 				{
 					id: "deleteIcon",
 					header: "",
@@ -67,7 +72,8 @@ export default class ContactFilesView extends JetView {
 				ContactID: id,
 				name: file.name,
 				fileDate: file.file.lastModifiedDate,
-				size: file.sizetext
+				size: file.sizetext,
+				sizeInBytes: file.size
 			};
 			contactsFiles.add(fileInfo);
 		});
@@ -81,7 +87,7 @@ export default class ContactFilesView extends JetView {
 	}
 
 	sortBySize(firstFile, secondFile) {
-		return parseFloat(firstFile.size) - parseFloat(secondFile.size);
+		return firstFile.sizeInBytes - secondFile.sizeInBytes;
 	}
 
 	deleteFile(id) {
