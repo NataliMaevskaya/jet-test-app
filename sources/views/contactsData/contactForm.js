@@ -255,6 +255,9 @@ export default class contactFormView extends JetView {
 			}
 		})
 			.then((res) => {
+				if (res.length === 0) {
+					return;
+				}
 				this.app.callEvent("onContactSelect", [res]);
 				this.cancelForm(res.id);
 			});
