@@ -133,20 +133,30 @@ export default class ContactsTemplateView extends JetView {
 		}).then(() => {
 			const contactId = this.getParam("id", true);
 			let actsToDelete;
+			let filesToDelete;
 			if (this.isNumber(contactId)) {
 				actsToDelete = activities.find(act => +act.ContactID === contactId);
+				filesToDelete = contactsFiles.find(file => +file.ContactID === contactId);
 			}
 			else if (this.isString(contactId)) {
 				actsToDelete = activities.find(act => act.ContactID.toString() === contactId);
+				filesToDelete = contactsFiles.find(file => file.ContactID.toString() === contactId);
 			}
 
 			contacts.waitSave(() => {
-				contacts.remove(contactId);
 				if (actsToDelete) {
-					actsToDelete.forEach((activity) => {
-						activities.remove(activity.id);
+					activities.waitSave(() => {
+						actsToDelete.forEach((activity) => {
+							activities.remove(activity.id);
+						});
 					});
 				}
+				if (filesToDelete) {
+					filesToDelete.forEach((file) => {
+						contactsFiles.remove(file.id);
+					});
+				}
+				contacts.remove(contactId);
 			})
 				.then(() => {
 					webix.message("All info of the contact is deleted");
