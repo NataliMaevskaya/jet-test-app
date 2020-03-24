@@ -70,9 +70,7 @@ export default class ContactsView extends JetView {
 			}
 		});
 		this.on(this.app, "onContactSelect", (contact) => {
-			const id = contact.id;
-			this.setParam("id", id, true);
-			this.contactsList.select(id);
+			this.contactsList.select(contact.id);
 		});
 	}
 
