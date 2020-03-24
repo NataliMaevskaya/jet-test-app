@@ -19,7 +19,7 @@ export default class ContactsView extends JetView {
 							template: obj => `
 											<div class="contact">
 												<div class="contact_avatar">
-													<img src="${obj.Photo || avatarDefault}" width="36" height="36">
+													<img class="list_contact_img" src="${obj.Photo || avatarDefault}" width="36" height="36">
 												</div>
 												<div class="contact_details">
 													<div class="contact_details_div">
@@ -69,8 +69,11 @@ export default class ContactsView extends JetView {
 				this.contactsList.select(id);
 			}
 		});
-		this.on(this.app, "onContactSelect", (contact) => {
+		this.on(this.app, "onSelectAddedOrUpdatedContact", (contact) => {
 			this.contactsList.select(contact.id);
+		});
+		this.on(this.app, "onShowContactTemplate", () => {
+			this.show("./contactsData.contactsTemplate");
 		});
 	}
 

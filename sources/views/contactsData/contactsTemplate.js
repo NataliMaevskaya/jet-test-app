@@ -20,7 +20,7 @@ export default class ContactsTemplateView extends JetView {
 								</div>
 								<div class="info_contact">
 									<div class="photo_contact">
-										<img src="${obj.Photo || "sources/images/avatar_default.png"}"/>
+										<img class="contact_img" src="${obj.Photo || "sources/images/avatar_default.png"}"/>
 										<p class="status_contact">${obj.Status || " - "}</p>
 									</div>
 									<div class="detailed_info_contact">

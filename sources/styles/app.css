@@ -21,6 +21,16 @@
     width: 75px;
     margin: 0 30px 0 15px;
 }
+.contact_img {
+    border-radius: 50%;
+    width: 96px;
+    height: 96px;
+}
+.list_contact_img {
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+}
 .info_contact {
     display: flex;
 }

@@ -7,9 +7,6 @@ export const activities = new webix.DataCollection({
 		$init: (obj) => {
 			obj.DueDate = webix.i18n.parseFormatDate(obj.DueDate);
 		},
-		$change: (obj) => {
-			obj.DueDate = webix.i18n.parseFormatDate(obj.DueDate);
-		},
 		$save: (obj) => {
 			obj.DueDate = dateToStr(obj.DueDate);
 		}

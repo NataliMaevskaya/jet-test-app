@@ -169,7 +169,7 @@ export default class contactFormView extends JetView {
 					view: "button",
 					value: "Cancel",
 					width: 150,
-					click: () => this.cancelForm()
+					click: () => this.cancelOrCloseFrom()
 				},
 				{
 					view: "button",
@@ -236,16 +236,19 @@ export default class contactFormView extends JetView {
 		}
 	}
 
-	cancelForm(id) {
+	cancelOrCloseFrom(id) {
 		this.contactForm.clear();
 		this.contactForm.clearValidation();
-		this.show(`/top/contacts?id=${id}/contactsData.contactsTemplate`);
+
+		this.app.callEvent("onSelectAddedOrUpdatedContact", [{id}]);
+		this.app.callEvent("onShowContactTemplate", []);
 	}
 
 	addSaveContact() {
 		contacts.waitSave(() => {
 			if (this.contactForm.validate()) {
 				const values = this.contactForm.getValues();
+				values.Photo = this.contactPhoto.getValues().Photo;
 				if (values && values.id) {
 					contacts.updateItem(values.id, values);
 				}
@@ -258,8 +261,7 @@ export default class contactFormView extends JetView {
 				if (res.length === 0) {
 					return;
 				}
-				this.app.callEvent("onContactSelect", [res]);
-				this.cancelForm(res.id);
+				this.cancelOrCloseFrom(res.id);
 			});
 	}
 
