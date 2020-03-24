@@ -41,7 +41,7 @@ export default class ActivityWindowView extends JetView {
 						view: "select",
 						label: "Contact",
 						name: "ContactID",
-						id: "contactId",
+						localId: "contactId",
 						value: "",
 						required: true,
 						options: contacts,

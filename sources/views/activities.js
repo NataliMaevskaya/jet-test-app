@@ -129,11 +129,6 @@ export default class ActivitiesView extends JetView {
 	}
 
 	showActivityEditOrAddWindow(activityId) {
-		if (activityId) {
-			this.activityWindow.showWindow(activityId);
-		}
-		else {
-			this.activityWindow.showWindow(false);
-		}
+		this.activityWindow.showWindow(activityId);
 	}
 }

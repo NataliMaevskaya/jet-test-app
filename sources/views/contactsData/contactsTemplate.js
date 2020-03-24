@@ -137,18 +137,17 @@ export default class ContactsTemplateView extends JetView {
 			actsToDelete = activities.find(act => String(act.ContactID) === String(contactId));
 			filesToDelete = contactsFiles.find(file => String(file.ContactID) === String(contactId));
 
+			actsToDelete = Array.from(actsToDelete, obj => obj.id);
+			filesToDelete = Array.from(filesToDelete, obj => obj.id);
+
 			contacts.waitSave(() => {
 				if (actsToDelete) {
 					activities.waitSave(() => {
-						actsToDelete.forEach((activity) => {
-							activities.remove(activity.id);
-						});
+						activities.remove(actsToDelete);
 					});
 				}
 				if (filesToDelete) {
-					filesToDelete.forEach((file) => {
-						contactsFiles.remove(file.id);
-					});
+					contactsFiles.remove(filesToDelete);
 				}
 				contacts.remove(contactId);
 			})

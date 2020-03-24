@@ -1,7 +1,6 @@
 import {JetView} from "webix-jet";
 import {statuses} from "../../models/statuses";
 import {contacts} from "../../models/contacts";
-import avatarDefault from "../../images/avatar_default.png";
 
 export default class contactFormView extends JetView {
 	config() {
@@ -265,6 +264,6 @@ export default class contactFormView extends JetView {
 	}
 
 	deletePhoto() {
-		this.contactPhoto.setValues({Photo: avatarDefault});
+		this.contactPhoto.setValues({Photo: ""});
 	}
 }

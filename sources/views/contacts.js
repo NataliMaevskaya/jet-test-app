@@ -1,6 +1,7 @@
 import {JetView} from "webix-jet";
 import {contacts} from "../models/contacts";
 import {statuses} from "../models/statuses";
+import avatarDefault from "../images/avatar_default.png";
 
 export default class ContactsView extends JetView {
 	config() {
@@ -18,7 +19,7 @@ export default class ContactsView extends JetView {
 							template: obj => `
 											<div class="contact">
 												<div class="contact_avatar">
-													<i class="mdi mdi-36px mdi-account-circle"></i>
+													<img src="${obj.Photo || avatarDefault}" width="36" height="36">
 												</div>
 												<div class="contact_details">
 													<div class="contact_details_div">

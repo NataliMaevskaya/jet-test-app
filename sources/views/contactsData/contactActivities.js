@@ -111,11 +111,6 @@ export default class ContactActivitiesView extends JetView {
 
 	showActivityEditOrAddWindow(activityId) {
 		const contactId = this.getParam("id", true);
-		if (activityId) {
-			this.activityWindow.showWindow(activityId, contactId); // edit the activity of the contact
-		}
-		else {
-			this.activityWindow.showWindow(false, contactId); // add an activity of the contact
-		}
+		this.activityWindow.showWindow(activityId, contactId);
 	}
 }
