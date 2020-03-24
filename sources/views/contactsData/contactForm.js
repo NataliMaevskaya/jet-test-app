@@ -105,6 +105,7 @@ export default class contactFormView extends JetView {
 				labelWidth: 150,
 				name: "Phone",
 				required: true,
+				pattern: {mask: "+### (##) ### ## ##", allow: /[0-9]/g},
 				invalidMessage: "Enter + and some digits"
 			},
 			{

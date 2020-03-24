@@ -134,14 +134,8 @@ export default class ContactsTemplateView extends JetView {
 			const contactId = this.getParam("id", true);
 			let actsToDelete;
 			let filesToDelete;
-			if (this.isNumber(contactId)) {
-				actsToDelete = activities.find(act => +act.ContactID === contactId);
-				filesToDelete = contactsFiles.find(file => +file.ContactID === contactId);
-			}
-			else if (this.isString(contactId)) {
-				actsToDelete = activities.find(act => act.ContactID.toString() === contactId);
-				filesToDelete = contactsFiles.find(file => file.ContactID.toString() === contactId);
-			}
+			actsToDelete = activities.find(act => String(act.ContactID) === String(contactId));
+			filesToDelete = contactsFiles.find(file => String(file.ContactID) === String(contactId));
 
 			contacts.waitSave(() => {
 				if (actsToDelete) {
@@ -184,25 +178,9 @@ export default class ContactsTemplateView extends JetView {
 				}
 				this.contactsTemplate.setValues(contactInfo);
 
-				if (this.isNumber(contactId)) {
-					activities.data.filter(activity => +activity.ContactID === contactId);
-					contactsFiles.data.filter(data => +data.ContactID === contactId);
-				}
-				else if (this.isString(contactId)) {
-					activities.data.filter(activity => activity.ContactID.toString() === contactId);
-					contactsFiles.data.filter(data => data.ContactID.toString() === contactId);
-				}
+				activities.data.filter(activity => String(activity.ContactID) === String(contactId));
+				contactsFiles.data.filter(data => String(data.ContactID) === String(contactId));
 			}
 		});
-	}
-
-	isString(o) {
-		const condition = typeof o === "object" && o.constructor === String;
-		return typeof o === "string" || condition;
-	}
-
-	isNumber(o) {
-		const condition = typeof o === "object" && o.constructor === Number;
-		return typeof o === "number" || condition;
 	}
 }

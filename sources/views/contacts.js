@@ -60,11 +60,13 @@ export default class ContactsView extends JetView {
 			contacts.waitData,
 			statuses.waitData
 		]).then(() => {
-			let id = this.getParam("id", true);
-			if (!id) {
-				id = contacts.getFirstId();
+			if (contacts.count()) {
+				let id = this.getParam("id", true);
+				if (!id) {
+					id = contacts.getFirstId();
+				}
+				this.contactsList.select(id);
 			}
-			this.contactsList.select(id);
 		});
 		this.on(this.app, "onContactSelect", (contact) => {
 			const id = contact.id;
