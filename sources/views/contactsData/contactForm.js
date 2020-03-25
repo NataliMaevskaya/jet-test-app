@@ -199,15 +199,7 @@ export default class contactFormView extends JetView {
 				},
 				{},
 				contactFormButtons
-			],
-			rules: {
-				FirstName: this.webix.rules.isNotEmpty,
-				LastName: this.webix.rules.isNotEmpty,
-				StartDate: this.webix.rules.isNotEmpty,
-				Company: this.webix.rules.isNotEmpty,
-				Phone: this.webix.rules.isNotEmpty,
-				Birthday: this.webix.rules.isNotEmpty
-			}
+			]
 		};
 	}
 
@@ -259,6 +251,9 @@ export default class contactFormView extends JetView {
 		const addOrSave = contactId ? "Save" : "Add";
 		this.addSaveButton.setValue(addOrSave);
 
+		this.contactForm.clearValidation();
+		this.contactForm.clear();
+
 		if (contactId && contacts.exists(contactId)) {
 			let contactValues;
 			contacts.waitData
@@ -267,10 +262,6 @@ export default class contactFormView extends JetView {
 					this.contactForm.setValues(contactValues);
 					this.contactPhoto.setValues({Photo: contactValues.Photo});
 				});
-		}
-		else {
-			this.contactForm.clearValidation();
-			this.contactForm.clear();
 		}
 	}
 }
