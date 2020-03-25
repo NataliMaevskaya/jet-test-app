@@ -32,8 +32,7 @@ export default class ContactsView extends JetView {
 							scroll: "y",
 							on: {
 								onAfterSelect: (id) => {
-									this.setParam("id", id, true);
-									this.show("./contactsData.contactsTemplate");
+									this.app.callEvent("onContactSelect", [{id}]);
 								}
 							}
 						},
@@ -69,11 +68,37 @@ export default class ContactsView extends JetView {
 				this.contactsList.select(id);
 			}
 		});
-		this.on(this.app, "onSelectAddedOrUpdatedContact", (contact) => {
-			this.contactsList.select(contact.id);
+		this.on(this.app, "onSelectAddedOrUpdatedOrFirstContact", (contact) => {
+			const urlId = this.getParam("id");
+			let contactId = contact.id;
+			contacts.waitData
+				.then(() => {
+					if (urlId && contacts.exists(urlId)) {
+						contactId = urlId;
+					}
+					else {
+						contactId = contacts.getFirstId();
+					}
+					this.contactsList.select(contactId);
+					this.app.callEvent("onShowContactTemplate", [{id: contactId}]);
+				});
 		});
-		this.on(this.app, "onShowContactTemplate", () => {
+
+		this.on(this.app, "onContactSelect", (contact) => {
+			const contactId = contact.id;
+			this.setParam("id", contactId, true);
+			this.app.callEvent("onShowContactTemplate", [{id: contactId}]);
+		});
+		this.on(this.app, "onShowContactTemplate", (contact) => {
+			const urlId = this.getParam("id");
+			const contactId = contact.id;
+			if (urlId !== contactId) {
+				this.app.callEvent("onContactSelect", [{id: contactId}]);
+			}
 			this.show("./contactsData.contactsTemplate");
+		});
+		this.on(this.app, "onShowContactForm", () => {
+			this.show("./contactsData.contactForm");
 		});
 	}
 

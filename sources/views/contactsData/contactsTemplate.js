@@ -124,7 +124,7 @@ export default class ContactsTemplateView extends JetView {
 	}
 
 	editContact() {
-		this.show("./contactsData.contactForm");
+		this.app.callEvent("onShowContactForm", []);
 	}
 
 	deleteContact() {
@@ -154,8 +154,7 @@ export default class ContactsTemplateView extends JetView {
 				.then(() => {
 					webix.message("All info of the contact is deleted");
 					const firstId = contacts.getFirstId();
-					this.app.callEvent("onContactSelect", [{id: firstId}]);
-					this.show(`/top/contacts?id=${firstId}/contactsData.contactsTemplate`);
+					this.app.callEvent("onSelectAddedOrUpdatedOrFirstContact", [{id: firstId}]);
 				});
 		});
 	}

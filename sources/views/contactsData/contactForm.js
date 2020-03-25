@@ -122,7 +122,7 @@ export default class contactFormView extends JetView {
 		const contactPhotoForm = {
 			cols: [
 				{
-					template: obj => `<img src="${obj.Photo || "sources/images/avatar_default.png"}"/>`,
+					template: obj => `<img class="contact_img" src="${obj.Photo || "sources/images/avatar_default.png"}"/>`,
 					name: "Photo",
 					labelWidth: 150,
 					localId: "contactPhoto",
@@ -169,7 +169,7 @@ export default class contactFormView extends JetView {
 					view: "button",
 					value: "Cancel",
 					width: 150,
-					click: () => this.cancelOrCloseFrom()
+					click: () => this.cancelOrCloseForm()
 				},
 				{
 					view: "button",
@@ -216,32 +216,13 @@ export default class contactFormView extends JetView {
 		this.headContactForm = this.$$("headContactForm");
 		this.addSaveButton = this.$$("addSaveButton");
 		this.contactPhoto = this.$$("contactPhoto");
-
-		const contactId = this.getParam("id", true);
-
-		const selectedAction = contactId ? "Edit" : "Add";
-		this.headContactForm.setValues({selectedAction});
-
-		const addOrSave = contactId ? "Save" : "Add";
-		this.addSaveButton.setValue(addOrSave);
-
-		if (contactId && contacts.exists(contactId)) {
-			let contactValues;
-			contacts.waitData
-				.then(() => {
-					contactValues = contacts.getItem(contactId);
-					this.contactForm.setValues(contactValues);
-					this.contactPhoto.setValues({Photo: contactValues.Photo});
-				});
-		}
 	}
 
-	cancelOrCloseFrom(id) {
+	cancelOrCloseForm(id) {
 		this.contactForm.clear();
 		this.contactForm.clearValidation();
 
-		this.app.callEvent("onSelectAddedOrUpdatedContact", [{id}]);
-		this.app.callEvent("onShowContactTemplate", []);
+		this.app.callEvent("onSelectAddedOrUpdatedOrFirstContact", [{id}]);
 	}
 
 	addSaveContact() {
@@ -261,11 +242,35 @@ export default class contactFormView extends JetView {
 				if (res.length === 0) {
 					return;
 				}
-				this.cancelOrCloseFrom(res.id);
+				this.cancelOrCloseForm(res.id);
 			});
 	}
 
 	deletePhoto() {
 		this.contactPhoto.setValues({Photo: ""});
+	}
+
+	urlChange() {
+		const contactId = this.getParam("id", true);
+
+		const selectedAction = contactId ? "Edit" : "Add";
+		this.headContactForm.setValues({selectedAction});
+
+		const addOrSave = contactId ? "Save" : "Add";
+		this.addSaveButton.setValue(addOrSave);
+
+		if (contactId && contacts.exists(contactId)) {
+			let contactValues;
+			contacts.waitData
+				.then(() => {
+					contactValues = contacts.getItem(contactId);
+					this.contactForm.setValues(contactValues);
+					this.contactPhoto.setValues({Photo: contactValues.Photo});
+				});
+		}
+		else {
+			this.contactForm.clearValidation();
+			this.contactForm.clear();
+		}
 	}
 }
