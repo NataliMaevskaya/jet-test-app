@@ -1,10 +1,9 @@
 import {JetView} from "webix-jet";
-import {activities} from "../models/activities";
-import {activityTypes} from "../models/activityTypes";
-import {contacts} from "../models/contacts";
-import bodyActivityWindow from "./activityWindow";
+import {activities} from "../../models/activities";
+import {activityTypes} from "../../models/activityTypes";
+import bodyActivityWindow from "../activityWindow";
 
-export default class ActivitiesView extends JetView {
+export default class ContactActivitiesView extends JetView {
 	config() {
 		const addActivityBtn = {
 			css: "white_bgc",
@@ -38,7 +37,8 @@ export default class ActivitiesView extends JetView {
 				],
 				options: activityTypes,
 				sort: "text",
-				width: 150
+				width: 150,
+				required: true
 			},
 			{
 				id: "DueDate",
@@ -65,17 +65,6 @@ export default class ActivitiesView extends JetView {
 				fillspace: true
 			},
 			{
-				id: "ContactID",
-				header: [
-					"Contact", {
-						content: "selectFilter"
-					}
-				],
-				options: contacts,
-				sort: "text",
-				width: 200
-			},
-			{
 				id: "editIcon",
 				header: "",
 				template: "<span class='mdi mdi-pencil-box-outline'></span>",
@@ -88,9 +77,9 @@ export default class ActivitiesView extends JetView {
 				width: 40
 			}
 		];
-		const activitiesTable = {
+		const activitiesContactTable = {
 			view: "datatable",
-			localId: "activitiesTable",
+			localId: "activitiesContactTable",
 			scroll: "y",
 			sort: "multi",
 			columns: tableColumns,
@@ -108,27 +97,20 @@ export default class ActivitiesView extends JetView {
 
 		return {
 			rows: [
-				addActivityBtn,
-				activitiesTable
+				activitiesContactTable,
+				addActivityBtn
 			]
 		};
 	}
 
 	init() {
-		this.activitiesTable = this.$$("activitiesTable");
+		this.activitiesContactTable = this.$$("activitiesContactTable");
 		this.activityWindow = this.ui(bodyActivityWindow);
-		this.activitiesTable.sync(activities);
-
-		webix.promise.all([
-			contacts.waitData,
-			activities.waitData,
-			activityTypes.waitData
-		]).then(() => {
-			activities.data.filter();
-		});
+		this.activitiesContactTable.sync(activities);
 	}
 
 	showActivityEditOrAddWindow(activityId) {
-		this.activityWindow.showWindow(activityId);
+		const contactId = this.getParam("id", true);
+		this.activityWindow.showWindow(activityId, contactId);
 	}
 }

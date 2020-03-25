@@ -1,0 +1,267 @@
+import {JetView} from "webix-jet";
+import {statuses} from "../../models/statuses";
+import {contacts} from "../../models/contacts";
+
+export default class contactFormView extends JetView {
+	config() {
+		const headContactForm = {
+			localId: "headContactForm",
+			template: "<h1 class='mt0'>#selectedAction# contact</h1>",
+			height: 40
+		};
+
+		const contactLeftForm = {
+			paddingX: 10,
+			margin: 20,
+			rows: [{
+				view: "text",
+				label: "First Name",
+				labelWidth: 150,
+				name: "FirstName",
+				required: true,
+				invalidMessage: "Enter first name"
+			},
+			{
+				view: "text",
+				label: "Last Name",
+				labelWidth: 150,
+				name: "LastName",
+				required: true,
+				invalidMessage: "Enter last name"
+			},
+			{
+				view: "datepicker",
+				value: new Date(),
+				label: "Joining date",
+				labelWidth: 150,
+				name: "StartDate",
+				format: webix.i18n.longDateFormatStr,
+				required: true,
+				invalidMessage: "Select date"
+			},
+			{
+				view: "select",
+				label: "Status",
+				labelWidth: 150,
+				name: "StatusID",
+				value: 1,
+				options: statuses,
+				invalidMessage: "Select status"
+			},
+			{
+				view: "text",
+				label: "Job",
+				labelWidth: 150,
+				name: "Job",
+				invalidMessage: "Enter job's name"
+			},
+			{
+				view: "text",
+				label: "Company",
+				labelWidth: 150,
+				name: "Company",
+				required: true,
+				invalidMessage: "Enter company name"
+			},
+			{
+				view: "text",
+				label: "Website",
+				labelWidth: 150,
+				name: "Website",
+				invalidMessage: "Enter website"
+			},
+			{
+				view: "textarea",
+				label: "Address",
+				labelWidth: 150,
+				name: "Address",
+				invalidMessage: "Enter address"
+			}
+			]
+		};
+
+		const contactRightForm = {
+			paddingX: 10,
+			margin: 20,
+			rows: [{
+				view: "text",
+				label: "Email",
+				labelWidth: 150,
+				name: "Email",
+				type: "email",
+				invalidMessage: "Enter email"
+			},
+			{
+				view: "text",
+				label: "Skype",
+				labelWidth: 150,
+				name: "Skype",
+				invalidMessage: "Enter Skype nickname"
+			},
+			{
+				view: "text",
+				label: "Phone",
+				labelWidth: 150,
+				name: "Phone",
+				required: true,
+				pattern: {mask: "+### (##) ### ## ##", allow: /[0-9]/g},
+				invalidMessage: "Enter + and some digits"
+			},
+			{
+				view: "datepicker",
+				label: "Birthday",
+				labelWidth: 150,
+				name: "Birthday",
+				type: "date",
+				format: webix.i18n.longDateFormatStr,
+				required: true,
+				invalidMessage: "Select date"
+			}
+			]
+		};
+		const contactPhotoForm = {
+			cols: [
+				{
+					template: obj => `<img class="contact_img" src="${obj.Photo || "sources/images/avatar_default.png"}"/>`,
+					name: "Photo",
+					labelWidth: 150,
+					localId: "contactPhoto",
+					height: 150
+				},
+				{
+					margin: 10,
+					rows: [
+						{
+							view: "uploader",
+							value: "Change photo",
+							localId: "photoUploader",
+							link: "contactPhoto",
+							accept: "image/jpg, image/jpeg, image/png, image/gif",
+							autosend: false,
+							multiple: false,
+							width: 150,
+							on: {
+								onBeforeFileAdd: (item) => {
+									const fileReader = new FileReader();
+									fileReader.readAsDataURL(item.file);
+									fileReader.onload = () => this.$$("contactPhoto").setValues({Photo: fileReader.result});
+								},
+								onFileUploadError: () => {
+									webix.message({type: "error", text: "Error during uploading photo!"});
+								}
+							}
+						},
+						{
+							view: "button",
+							value: "Delete photo",
+							width: 150,
+							click: () => this.deletePhoto()
+						}
+					]
+				}
+			]
+		};
+
+		const contactFormButtons = {
+			cols: [
+				{},
+				{
+					view: "button",
+					value: "Cancel",
+					width: 150,
+					click: () => this.cancelOrCloseForm()
+				},
+				{
+					view: "button",
+					localId: "addSaveButton",
+					width: 150,
+					click: () => this.addSaveContact()
+				}
+			]
+
+		};
+		return {
+			view: "form",
+			localId: "contactForm",
+			margin: 20,
+			elements: [
+				headContactForm,
+				{
+					cols: [
+						contactLeftForm,
+						{
+							rows: [
+								contactRightForm,
+								contactPhotoForm
+							]
+						}
+					]
+				},
+				{},
+				contactFormButtons
+			]
+		};
+	}
+
+	init() {
+		this.contactForm = this.$$("contactForm");
+		this.headContactForm = this.$$("headContactForm");
+		this.addSaveButton = this.$$("addSaveButton");
+		this.contactPhoto = this.$$("contactPhoto");
+	}
+
+	cancelOrCloseForm(id) {
+		this.contactForm.clear();
+		this.contactForm.clearValidation();
+
+		this.app.callEvent("onSelectAddedOrUpdatedOrFirstContact", [{id}]);
+	}
+
+	addSaveContact() {
+		contacts.waitSave(() => {
+			if (this.contactForm.validate()) {
+				const values = this.contactForm.getValues();
+				values.Photo = this.contactPhoto.getValues().Photo;
+				if (values && values.id) {
+					contacts.updateItem(values.id, values);
+				}
+				else {
+					contacts.add(values, 0);
+				}
+			}
+		})
+			.then((res) => {
+				if (res.length === 0) {
+					return;
+				}
+				this.cancelOrCloseForm(res.id);
+			});
+	}
+
+	deletePhoto() {
+		this.contactPhoto.setValues({Photo: ""});
+	}
+
+	urlChange() {
+		const contactId = this.getParam("id", true);
+
+		const selectedAction = contactId ? "Edit" : "Add";
+		this.headContactForm.setValues({selectedAction});
+
+		const addOrSave = contactId ? "Save" : "Add";
+		this.addSaveButton.setValue(addOrSave);
+
+		this.contactForm.clearValidation();
+		this.contactForm.clear();
+
+		if (contactId && contacts.exists(contactId)) {
+			let contactValues;
+			contacts.waitData
+				.then(() => {
+					contactValues = contacts.getItem(contactId);
+					this.contactForm.setValues(contactValues);
+					this.contactPhoto.setValues({Photo: contactValues.Photo});
+				});
+		}
+	}
+}

@@ -10,6 +10,8 @@ export default class ActivityWindowView extends JetView {
 			localId: "activityWindow",
 			height: 500,
 			position: "center",
+			modal: true,
+			move: true,
 			head: {
 				localId: "headActivityWindow",
 				template: "#selectedAction# activity"
@@ -39,6 +41,8 @@ export default class ActivityWindowView extends JetView {
 						view: "select",
 						label: "Contact",
 						name: "ContactID",
+						localId: "contactId",
+						value: "",
 						required: true,
 						options: contacts,
 						invalidMessage: "Select type of activity"
@@ -94,22 +98,27 @@ export default class ActivityWindowView extends JetView {
 
 	init() {
 		this.bodyActivityWindow = this.$$("bodyActivityWindow");
+		this.contactId = this.$$("contactId");
 	}
 
-	showWindow(id) {
+	showWindow(activityId, contactId) {
 		this.head = this.$$("headActivityWindow");
 		this.addSaveButton = this.$$("addSaveButton");
 
-		const selectedAction = id ? "Edit" : "Add";
+		const selectedAction = activityId ? "Edit" : "Add";
 		this.head.setValues({selectedAction});
 
-		const addOrSave = id ? "Save" : "Add";
+		const addOrSave = activityId ? "Save" : "Add";
 		this.addSaveButton.setValue(addOrSave);
 
-		if (id && activities.exists(id)) {
-			const item = activities.getItem(id);
+		if (activityId && activities.exists(activityId)) {
+			const item = activities.getItem(activityId);
 			item.DueTime = item.DueDate;
 			this.bodyActivityWindow.setValues(item);
+		}
+		if (contactId && contacts.exists(contactId)) {
+			this.contactId.setValue(contactId);
+			this.contactId.disable();
 		}
 		this.getRoot().show();
 	}
@@ -117,7 +126,6 @@ export default class ActivityWindowView extends JetView {
 	hideWindow() {
 		this.bodyActivityWindow.clear();
 		this.bodyActivityWindow.clearValidation();
-
 		this.getRoot().hide();
 	}
 
