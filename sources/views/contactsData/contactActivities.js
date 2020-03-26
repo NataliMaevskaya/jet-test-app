@@ -32,7 +32,7 @@ export default class ContactActivitiesView extends JetView {
 			{
 				id: "TypeID",
 				header: [
-					_("Activity Type"), {
+					_("Activity type"), {
 						content: "selectFilter"
 					}
 				],

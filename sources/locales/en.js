@@ -1,5 +1,6 @@
 export default {
 	Contacts: "Contacts",
+	contact: "contact",
 	Delete: "Delete",
 	Data: "Data",
 	Statuses: "Statuses",
@@ -20,7 +21,7 @@ export default {
 	Company: "Company",
 	"Enter company name": "Enter company name",
 	Website: "Website",
-	"Enter website":"Enter website",
+	"Enter website": "Enter website",
 	Address: "Address",
 	"Enter address": "Enter address",
 	Email: "Email",
@@ -37,7 +38,7 @@ export default {
 	Add: "Add",
 	Save: "Save",
 	"Add activity": "Add activity",
-	"Activity Type": "Activity Type",
+	"Activity type": "Activity type",
 	"Due date": "Due date",
 	Details: "Details",
 	Activities: "Activities",
@@ -50,5 +51,16 @@ export default {
 	Date: "Date",
 	Time: "Time",
 	Completed: "Completed",
-	"Add contact": "Add contact"
+	"Add contact": "Add contact",
+	"Type to find matching contacts": "Type to find matching contacts",
+	All: "All",
+	Overdue: "Overdue",
+	Today: "Today",
+	Tomorrow: "Tomorrow",
+	"This week": "This week",
+	"This month": "This month",
+	"Types of activity": "Types of activity",
+	"Statuses of contact": "Statuses of contact",
+	Value: "Value",
+	activity: "activity"
 };

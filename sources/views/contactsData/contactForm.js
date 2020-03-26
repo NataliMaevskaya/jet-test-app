@@ -7,7 +7,7 @@ export default class contactFormView extends JetView {
 		const _ = this.app.getService("locale")._;
 		const headContactForm = {
 			localId: "headContactForm",
-			template: "<h1 class='mt0'>#selectedAction# contact</h1>",
+			template: `<h1 class='mt0'>#selectedAction# ${_("contact")}</h1>`,
 			height: 40
 		};
 
@@ -174,7 +174,7 @@ export default class contactFormView extends JetView {
 				},
 				{
 					view: "button",
-					localId: _("addSaveButton"),
+					localId: "addSaveButton",
 					width: 150,
 					click: () => this.addSaveContact()
 				}

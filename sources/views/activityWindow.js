@@ -15,7 +15,7 @@ export default class ActivityWindowView extends JetView {
 			move: true,
 			head: {
 				localId: "headActivityWindow",
-				template: "#selectedAction# activity"
+				template: `#selectedAction# ${_("activity")}`
 			},
 			body: {
 				view: "form",

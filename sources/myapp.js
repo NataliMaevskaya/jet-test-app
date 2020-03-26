@@ -28,7 +28,8 @@ if (!BUILD_AS_MODULE) {
 			}
 		});
 		app.attachEvent("app:error:resolve", () => {
-			webix.delay(() => app.show("/top"));
+			webix.delay(() => app.show("/top/settings"));
+			webix.message({type: "error", text: "Something wrong"});
 		});
 	});
 }

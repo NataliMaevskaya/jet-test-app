@@ -1,5 +1,6 @@
 export default {
 	Contacts: "Контакты",
+	contact: "контакт",
 	Delete: "Удалить",
 	Statuses: "Статусы",
 	Icon: "Значок",
@@ -36,7 +37,7 @@ export default {
 	Add: "Добавить",
 	Save: "Сохранить",
 	"Add activity": "Добавить действие",
-	"Activity Type": "Добавить тип",
+	"Activity type": "Добавить тип",
 	"Due date": "Срок сдачи",
 	Details: "Детали",
 	Activities: "Действия",
@@ -48,6 +49,17 @@ export default {
 	Type: "Тип",
 	Date: "Дата",
 	Time: "Время",
-	Completed: "Завершено",
-	"Add contact": "Добавить контакт"
+	Completed: "Завершенные",
+	"Add contact": "Добавить контакт",
+	"Type to find matching contacts": "Введите для поиска контактов",
+	All: "Все",
+	Overdue: "Просроченные",
+	Today: "Сегодня",
+	Tomorrow: "Завтра",
+	"This week": "На этой неделе",
+	"This month": "В этом месяце",
+	"Types of activity": "Типы действий",
+	"Statuses of contact": "Статусы контактов",
+	Value: "Значение",
+	activity: "действие"
 };
