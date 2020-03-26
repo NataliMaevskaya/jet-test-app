@@ -1,4 +1,5 @@
 import {JetView} from "webix-jet";
+import {icons} from "../models/icons";
 
 export default class TableToolbar extends JetView {
 	constructor(app, name, data) {
@@ -23,10 +24,12 @@ export default class TableToolbar extends JetView {
 				},
 				{},
 				{
+					view: "richselect",
 					id: "icon",
 					header: _("Icon"),
-					template: "#Icon#",
-					editor: "text",
+					template: obj => `<span class="mdi mdi-${obj.Icon}"></span> ${obj.Icon}`,
+					editor: "richselect",
+					options: icons,
 					fillspace: 1
 				}
 			]
@@ -73,7 +76,7 @@ export default class TableToolbar extends JetView {
 		}).then((res) => {
 			this.datatable.edit({
 				row: res.id,
-				column: "Name"
+				column: "Value"
 			});
 		});
 	}
