@@ -5,6 +5,7 @@ import avatarDefault from "../images/avatar_default.png";
 
 export default class ContactsView extends JetView {
 	config() {
+		const _ = this.app.getService("locale")._;
 		const contactsView = {
 			cols: [
 				{
@@ -39,7 +40,7 @@ export default class ContactsView extends JetView {
 						{
 							view: "button",
 							localId: "addContactBtn",
-							label: "Add contact",
+							label: _("Add contact"),
 							type: "icon",
 							icon: "mdi mdi-plus-box",
 							css: "white_bgc",

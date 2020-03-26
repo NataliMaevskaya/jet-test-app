@@ -4,6 +4,7 @@ import {contacts} from "../../models/contacts";
 
 export default class contactFormView extends JetView {
 	config() {
+		const _ = this.app.getService("locale")._;
 		const headContactForm = {
 			localId: "headContactForm",
 			template: "<h1 class='mt0'>#selectedAction# contact</h1>",
@@ -15,67 +16,67 @@ export default class contactFormView extends JetView {
 			margin: 20,
 			rows: [{
 				view: "text",
-				label: "First Name",
+				label: _("First Name"),
 				labelWidth: 150,
 				name: "FirstName",
 				required: true,
-				invalidMessage: "Enter first name"
+				invalidMessage: _("Enter first name")
 			},
 			{
 				view: "text",
-				label: "Last Name",
+				label: _("Last Name"),
 				labelWidth: 150,
 				name: "LastName",
 				required: true,
-				invalidMessage: "Enter last name"
+				invalidMessage: _("Enter last name")
 			},
 			{
 				view: "datepicker",
 				value: new Date(),
-				label: "Joining date",
+				label: _("Joining date"),
 				labelWidth: 150,
 				name: "StartDate",
 				format: webix.i18n.longDateFormatStr,
 				required: true,
-				invalidMessage: "Select date"
+				invalidMessage: _("Select date")
 			},
 			{
 				view: "select",
-				label: "Status",
+				label: _("Status"),
 				labelWidth: 150,
 				name: "StatusID",
 				value: 1,
 				options: statuses,
-				invalidMessage: "Select status"
+				invalidMessage: _("Select status")
 			},
 			{
 				view: "text",
-				label: "Job",
+				label: _("Job"),
 				labelWidth: 150,
 				name: "Job",
-				invalidMessage: "Enter job's name"
+				invalidMessage: _("Enter job's name")
 			},
 			{
 				view: "text",
-				label: "Company",
+				label: _("Company"),
 				labelWidth: 150,
 				name: "Company",
 				required: true,
-				invalidMessage: "Enter company name"
+				invalidMessage: _("Enter company name")
 			},
 			{
 				view: "text",
-				label: "Website",
+				label: _("Website"),
 				labelWidth: 150,
 				name: "Website",
-				invalidMessage: "Enter website"
+				invalidMessage: _("Enter website")
 			},
 			{
 				view: "textarea",
-				label: "Address",
+				label: _("Address"),
 				labelWidth: 150,
 				name: "Address",
-				invalidMessage: "Enter address"
+				invalidMessage: _("Enter address")
 			}
 			]
 		};
@@ -85,37 +86,37 @@ export default class contactFormView extends JetView {
 			margin: 20,
 			rows: [{
 				view: "text",
-				label: "Email",
+				label: _("Email"),
 				labelWidth: 150,
 				name: "Email",
 				type: "email",
-				invalidMessage: "Enter email"
+				invalidMessage: _("Enter email")
 			},
 			{
 				view: "text",
-				label: "Skype",
+				label: _("Skype"),
 				labelWidth: 150,
 				name: "Skype",
-				invalidMessage: "Enter Skype nickname"
+				invalidMessage: _("Enter Skype nickname")
 			},
 			{
 				view: "text",
-				label: "Phone",
+				label: _("Phone"),
 				labelWidth: 150,
 				name: "Phone",
 				required: true,
 				pattern: {mask: "+### (##) ### ## ##", allow: /[0-9]/g},
-				invalidMessage: "Enter + and some digits"
+				invalidMessage: "Enter ### ## ### ## ##"
 			},
 			{
 				view: "datepicker",
-				label: "Birthday",
+				label: _("Birthday"),
 				labelWidth: 150,
 				name: "Birthday",
 				type: "date",
 				format: webix.i18n.longDateFormatStr,
 				required: true,
-				invalidMessage: "Select date"
+				invalidMessage: _("Select date")
 			}
 			]
 		};
@@ -133,7 +134,7 @@ export default class contactFormView extends JetView {
 					rows: [
 						{
 							view: "uploader",
-							value: "Change photo",
+							value: _("Change photo"),
 							localId: "photoUploader",
 							link: "contactPhoto",
 							accept: "image/jpg, image/jpeg, image/png, image/gif",
@@ -153,7 +154,7 @@ export default class contactFormView extends JetView {
 						},
 						{
 							view: "button",
-							value: "Delete photo",
+							value: _("Delete photo"),
 							width: 150,
 							click: () => this.deletePhoto()
 						}
@@ -167,13 +168,13 @@ export default class contactFormView extends JetView {
 				{},
 				{
 					view: "button",
-					value: "Cancel",
+					value: _("Cancel"),
 					width: 150,
 					click: () => this.cancelOrCloseForm()
 				},
 				{
 					view: "button",
-					localId: "addSaveButton",
+					localId: _("addSaveButton"),
 					width: 150,
 					click: () => this.addSaveContact()
 				}
@@ -243,12 +244,13 @@ export default class contactFormView extends JetView {
 	}
 
 	urlChange() {
+		const _ = this.app.getService("locale")._;
 		const contactId = this.getParam("id", true);
 
-		const selectedAction = contactId ? "Edit" : "Add";
+		const selectedAction = contactId ? _("Edit") : _("Add");
 		this.headContactForm.setValues({selectedAction});
 
-		const addOrSave = contactId ? "Save" : "Add";
+		const addOrSave = contactId ? _("Save") : _("Add");
 		this.addSaveButton.setValue(addOrSave);
 
 		this.contactForm.clearValidation();

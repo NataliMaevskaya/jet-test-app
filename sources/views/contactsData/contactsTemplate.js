@@ -10,6 +10,7 @@ import contactFiles from "./contactFiles";
 
 export default class ContactsTemplateView extends JetView {
 	config() {
+		const _ = this.app.getService("locale")._;
 		const contactInfo = {
 			paddindY: 1,
 			localId: "contactsTemplate",
@@ -45,18 +46,18 @@ export default class ContactsTemplateView extends JetView {
 					cols: [
 						{
 							view: "button",
-							label: "Delete",
+							label: _("Delete"),
 							type: "icon",
 							icon: "wxi-trash",
-							width: 90,
+							width: 180,
 							click: () => this.deleteContact()
 						},
 						{
 							view: "button",
-							label: "Edit",
+							label: _("Edit"),
 							type: "icon",
 							icon: "mdi mdi-pencil-box-outline",
-							width: 90,
+							width: 180,
 							click: () => this.editContact()
 						}
 					]
@@ -72,11 +73,11 @@ export default class ContactsTemplateView extends JetView {
 			options: [
 				{
 					id: "segmentedActivities",
-					value: "Activities"
+					value: _("Activities")
 				},
 				{
 					id: "segmentedFiles",
-					value: "Files"
+					value: _("Files")
 				}
 			],
 			on: {
