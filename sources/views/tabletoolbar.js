@@ -9,6 +9,12 @@ export default class TableToolbar extends JetView {
 
 	config() {
 		const _ = this.app.getService("locale")._;
+		const popupRichselectEditor = {
+			view: "suggest",
+			body: {
+				template: "<span class='mdi mdi-#value#'></span> #value#"
+			}
+		};
 		const datatable = {
 			view: "datatable",
 			localId: "settings:datatable",
@@ -17,19 +23,19 @@ export default class TableToolbar extends JetView {
 			editable: true,
 			columns: [
 				{
-					id: "value",
+					id: "Value",
 					header: _("Value"),
 					editor: "text",
 					fillspace: 2
 				},
 				{},
 				{
-					view: "richselect",
-					id: "icon",
+					id: "Icon",
 					header: _("Icon"),
-					template: obj => `<span class="mdi mdi-${obj.Icon}"></span> ${obj.Icon}`,
+					template: obj => `<span class="mdi mdi-${obj.Icon || ""}"></span> ${obj.Icon || ""}`,
 					editor: "richselect",
 					options: icons,
+					popup: popupRichselectEditor,
 					fillspace: 1
 				}
 			]
