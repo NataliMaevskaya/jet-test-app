@@ -163,7 +163,6 @@ export default class ContactsTemplateView extends JetView {
 	urlChange() {
 		webix.promise.all([
 			contacts.waitData,
-			activities.waitData,
 			activityTypes.waitData
 		]).then(() => {
 			const contactId = this.getParam("id", true);
