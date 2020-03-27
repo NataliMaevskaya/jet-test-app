@@ -12,7 +12,7 @@ export default class ContactActivitiesView extends JetView {
 				{},
 				{
 					view: "button",
-					width: 150,
+					autowidth: true,
 					type: "icon",
 					icon: "mdi mdi-plus-box",
 					label: _("Add activity"),

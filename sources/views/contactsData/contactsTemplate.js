@@ -49,7 +49,7 @@ export default class ContactsTemplateView extends JetView {
 							label: _("Delete"),
 							type: "icon",
 							icon: "wxi-trash",
-							width: 180,
+							autowidth: true,
 							click: () => this.deleteContact()
 						},
 						{
@@ -57,7 +57,7 @@ export default class ContactsTemplateView extends JetView {
 							label: _("Edit"),
 							type: "icon",
 							icon: "mdi mdi-pencil-box-outline",
-							width: 180,
+							autowidth: true,
 							click: () => this.editContact()
 						}
 					]

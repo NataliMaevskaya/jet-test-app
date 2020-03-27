@@ -13,7 +13,7 @@ export default class ActivitiesView extends JetView {
 				{},
 				{
 					view: "button",
-					width: 200,
+					autowidth: true,
 					type: "icon",
 					icon: "mdi mdi-plus-box",
 					label: _("Add activity"),

@@ -90,6 +90,9 @@ export default class ActivityWindowView extends JetView {
 						]
 					}
 				],
+				elementsConfig: {
+					labelWidth: 100
+				},
 				rules: {
 					$all: webix.rules.isNotEmpty
 				}
