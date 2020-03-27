@@ -155,7 +155,7 @@ export default class contactFormView extends JetView {
 						{
 							view: "button",
 							value: _("Delete photo"),
-							autowidth: true,
+							width: 150,
 							click: () => this.deletePhoto()
 						}
 					]
@@ -169,13 +169,13 @@ export default class contactFormView extends JetView {
 				{
 					view: "button",
 					value: _("Cancel"),
-					autowidth: true,
+					width: 150,
 					click: () => this.cancelOrCloseForm()
 				},
 				{
 					view: "button",
 					localId: "addSaveButton",
-					autowidth: true,
+					width: 150,
 					click: () => this.addSaveContact()
 				}
 			]

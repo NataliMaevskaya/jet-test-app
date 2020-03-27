@@ -37,6 +37,10 @@ export default class ActivitiesView extends JetView {
 						content: "selectFilter"
 					}
 				],
+				template: (obj) => {
+					const activityTypeItem = activityTypes.getItem(obj.TypeID);
+					return `<span class="mdi mdi-${activityTypeItem.Icon}"></span> ${activityTypeItem.Value} `;
+				},
 				options: activityTypes,
 				sort: "text",
 				width: 150

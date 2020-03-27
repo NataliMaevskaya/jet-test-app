@@ -22,7 +22,7 @@ export default class ContactsTemplateView extends JetView {
 								<div class="info_contact">
 									<div class="photo_contact">
 										<img class="contact_img" src="${obj.Photo || "sources/images/avatar_default.png"}"/>
-										<p class="status_contact">${obj.Status || " - "}</p>
+										<p class="status_contact mdi mdi-${obj.Icon}">${obj.Status || " - "}</p>
 									</div>
 									<div class="detailed_info_contact">
 										<span class="mdi mdi-email mdi_details"> ${obj.Email || " - "}</span>
@@ -174,6 +174,7 @@ export default class ContactsTemplateView extends JetView {
 				const item = statuses.getItem(contactStatusId);
 				if (contactStatusId && item) {
 					contactInfo.Status = statuses.getItem(contactStatusId).Value;
+					contactInfo.Icon = statuses.getItem(contactStatusId).Icon;
 				}
 				this.contactsTemplate.setValues(contactInfo);
 

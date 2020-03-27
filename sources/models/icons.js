@@ -32,6 +32,10 @@ export const icons = new webix.DataCollection({
 		{
 			id: "account-key",
 			value: "account-key"
+		},
+		{
+			id: "close",
+			value: "close"
 		}
 	]
 });
