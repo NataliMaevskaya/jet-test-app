@@ -6,16 +6,17 @@ import bodyActivityWindow from "./activityWindow";
 
 export default class ActivitiesView extends JetView {
 	config() {
+		const _ = this.app.getService("locale")._;
 		const addActivityBtn = {
 			css: "white_bgc",
 			cols: [
 				{},
 				{
 					view: "button",
-					width: 150,
+					autowidth: true,
 					type: "icon",
 					icon: "mdi mdi-plus-box",
-					label: "Add activity",
+					label: _("Add activity"),
 					click: () => this.showActivityEditOrAddWindow()
 				}
 			]
@@ -32,24 +33,31 @@ export default class ActivitiesView extends JetView {
 			{
 				id: "TypeID",
 				header: [
-					"Activity Type", {
+					_("Activity type"), {
 						content: "selectFilter"
 					}
 				],
+				template: (obj) => {
+					const activityTypeItem = activityTypes.getItem(obj.TypeID);
+					return `<span class="mdi mdi-${activityTypeItem.Icon}"></span> ${activityTypeItem.Value} `;
+				},
 				options: activityTypes,
 				sort: "text",
 				width: 150
 			},
 			{
 				id: "DueDate",
-				header: ["Due date", {
-					content: "datepickerFilter",
-					compare(value, filter) {
-						value = webix.i18n.dateFormatStr(value);
-						filter = webix.i18n.dateFormatStr(filter);
-						return value === filter;
+				header: [
+					_("Due date"),
+					{
+						content: "datepickerFilter",
+						compare(value, filter) {
+							value = webix.i18n.dateFormatStr(value);
+							filter = webix.i18n.dateFormatStr(filter);
+							return value === filter;
+						}
 					}
-				}],
+				],
 				format: webix.i18n.longDateFormatStr,
 				sort: "date",
 				width: 160
@@ -57,7 +65,7 @@ export default class ActivitiesView extends JetView {
 			{
 				id: "Details",
 				header: [
-					"Details", {
+					_("Details"), {
 						content: "textFilter"
 					}
 				],
@@ -67,7 +75,7 @@ export default class ActivitiesView extends JetView {
 			{
 				id: "ContactID",
 				header: [
-					"Contact", {
+					_("Contact"), {
 						content: "selectFilter"
 					}
 				],
@@ -88,6 +96,39 @@ export default class ActivitiesView extends JetView {
 				width: 40
 			}
 		];
+		const tabbar = {
+			view: "tabbar",
+			localId: "activitiesFilter",
+			value: "all",
+			options: [
+				{
+					id: "all",
+					value: _("All")},
+				{
+					id: "overdue",
+					value: _("Overdue")},
+				{
+					id: "completed",
+					value: _("Completed")},
+				{
+					id: "today",
+					value: _("Today")},
+				{
+					id: "tomorrow",
+					value: _("Tomorrow")},
+				{
+					id: "week",
+					value: _("This week")},
+				{
+					id: "month",
+					value: _("This month")}
+			],
+			on: {
+				onChange: () => {
+					this.$$("activitiesTable").filterByAll();
+				}
+			}
+		};
 		const activitiesTable = {
 			view: "datatable",
 			localId: "activitiesTable",
@@ -108,6 +149,7 @@ export default class ActivitiesView extends JetView {
 
 		return {
 			rows: [
+				tabbar,
 				addActivityBtn,
 				activitiesTable
 			]
@@ -126,9 +168,46 @@ export default class ActivitiesView extends JetView {
 		]).then(() => {
 			activities.data.filter();
 		});
+		this.activitiesTable.registerFilter(
+			this.$$("activitiesFilter"), {
+				columnId: "State",
+				compare: (state, filter, activity) => this.filterActivities(state, filter, activity)
+			},
+			{
+				getValue: view => view.getValue(),
+				setValue: (view, value) => view.setValue(value)
+			}
+		);
 	}
 
 	showActivityEditOrAddWindow(activityId) {
 		this.activityWindow.showWindow(activityId);
+	}
+
+	filterActivities(state, filter, activity) {
+		const currentDate = new Date();
+		const todayDate = webix.Date.datePart(currentDate);
+		const tomorrowDate = webix.Date.add(currentDate, 1, "day", true);
+		const currentWeekStart = webix.Date.weekStart(currentDate);
+		const currentWeekEnd = webix.Date.add(currentWeekStart, 7, "day", true);
+		const currentMonthStart = webix.Date.monthStart(currentDate);
+		const currentMonthEnd = webix.Date.add(currentMonthStart, 1, "month", true);
+
+		switch (filter) {
+			case "overdue":
+				return state === "Open" && todayDate > activity.DueDate;
+			case "completed":
+				return state === "Close";
+			case "today":
+				return webix.Date.equal(webix.Date.datePart(activity.DueDate), todayDate);
+			case "tomorrow":
+				return webix.Date.equal(webix.Date.datePart(activity.DueDate), tomorrowDate);
+			case "week":
+				return activity.DueDate >= currentWeekStart && activity.DueDate <= currentWeekEnd;
+			case "month":
+				return activity.DueDate >= currentMonthStart && activity.DueDate <= currentMonthEnd;
+			default:
+				return true;
+		}
 	}
 }

@@ -5,6 +5,7 @@ import {contacts} from "../models/contacts";
 
 export default class ActivityWindowView extends JetView {
 	config() {
+		const _ = this.app.getService("locale")._;
 		return {
 			view: "window",
 			localId: "activityWindow",
@@ -14,7 +15,7 @@ export default class ActivityWindowView extends JetView {
 			move: true,
 			head: {
 				localId: "headActivityWindow",
-				template: "#selectedAction# activity"
+				template: `#selectedAction# ${_("activity")}`
 			},
 			body: {
 				view: "form",
@@ -23,7 +24,7 @@ export default class ActivityWindowView extends JetView {
 				elements: [
 					{
 						view: "textarea",
-						label: "Details",
+						label: _("Details"),
 						name: "Details",
 						width: 500,
 						height: 200,
@@ -31,7 +32,7 @@ export default class ActivityWindowView extends JetView {
 					},
 					{
 						view: "select",
-						label: "Type",
+						label: _("Type"),
 						name: "TypeID",
 						required: true,
 						options: activityTypes,
@@ -39,7 +40,7 @@ export default class ActivityWindowView extends JetView {
 					},
 					{
 						view: "select",
-						label: "Contact",
+						label: _("Contact"),
 						name: "ContactID",
 						localId: "contactId",
 						value: "",
@@ -51,14 +52,14 @@ export default class ActivityWindowView extends JetView {
 						cols: [
 							{
 								view: "datepicker",
-								label: "Date",
+								label: _("Date"),
 								name: "DueDate",
 								format: webix.i18n.longDateFormatStr,
 								invalidMessage: "Select date"
 							},
 							{
 								view: "datepicker",
-								label: "Time",
+								label: _("Time"),
 								name: "DueTime",
 								type: "time",
 								format: webix.i18n.timeFormat,
@@ -69,7 +70,7 @@ export default class ActivityWindowView extends JetView {
 					{
 						view: "checkbox",
 						id: "State",
-						label: "Completed",
+						label: _("Completed"),
 						uncheckValue: "Open",
 						checkValue: "Close"
 					},
@@ -83,12 +84,15 @@ export default class ActivityWindowView extends JetView {
 							},
 							{
 								view: "button",
-								label: "Cancel",
+								label: _("Cancel"),
 								click: () => this.hideWindow()
 							}
 						]
 					}
 				],
+				elementsConfig: {
+					labelWidth: 100
+				},
 				rules: {
 					$all: webix.rules.isNotEmpty
 				}
@@ -102,13 +106,14 @@ export default class ActivityWindowView extends JetView {
 	}
 
 	showWindow(activityId, contactId) {
+		const _ = this.app.getService("locale")._;
 		this.head = this.$$("headActivityWindow");
 		this.addSaveButton = this.$$("addSaveButton");
 
-		const selectedAction = activityId ? "Edit" : "Add";
+		const selectedAction = activityId ? _("Edit") : _("Add");
 		this.head.setValues({selectedAction});
 
-		const addOrSave = activityId ? "Save" : "Add";
+		const addOrSave = activityId ? _("Save") : _("Add");
 		this.addSaveButton.setValue(addOrSave);
 
 		if (activityId && activities.exists(activityId)) {

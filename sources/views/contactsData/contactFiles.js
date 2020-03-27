@@ -3,6 +3,7 @@ import {contactsFiles} from "../../models/contactsFiles";
 
 export default class ContactFilesView extends JetView {
 	config() {
+		const _ = this.app.getService("locale")._;
 		const uploadButton = {
 			cols: [
 				{},
@@ -27,13 +28,13 @@ export default class ContactFilesView extends JetView {
 			columns: [
 				{
 					id: "name",
-					header: "Name",
+					header: _("Name"),
 					fillspace: true,
 					sort: "string"
 				},
 				{
 					id: "fileDate",
-					header: "Change date",
+					header: _("Change date"),
 					value: new Date(),
 					format: webix.i18n.longDateFormatStr,
 					fillspace: true,
@@ -41,7 +42,7 @@ export default class ContactFilesView extends JetView {
 				},
 				{
 					id: "size",
-					header: "Size",
+					header: _("Size"),
 					sort: this.sortBySize.bind(this)
 				},
 				{

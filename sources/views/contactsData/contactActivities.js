@@ -5,16 +5,17 @@ import bodyActivityWindow from "../activityWindow";
 
 export default class ContactActivitiesView extends JetView {
 	config() {
+		const _ = this.app.getService("locale")._;
 		const addActivityBtn = {
 			css: "white_bgc",
 			cols: [
 				{},
 				{
 					view: "button",
-					width: 150,
+					autowidth: true,
 					type: "icon",
 					icon: "mdi mdi-plus-box",
-					label: "Add activity",
+					label: _("Add activity"),
 					click: () => this.showActivityEditOrAddWindow()
 				}
 			]
@@ -31,10 +32,14 @@ export default class ContactActivitiesView extends JetView {
 			{
 				id: "TypeID",
 				header: [
-					"Activity Type", {
+					_("Activity type"), {
 						content: "selectFilter"
 					}
 				],
+				template: (obj) => {
+					const activityTypeItem = activityTypes.getItem(obj.TypeID);
+					return `<span class="mdi mdi-${activityTypeItem.Icon}"></span> ${activityTypeItem.Value} `;
+				},
 				options: activityTypes,
 				sort: "text",
 				width: 150,
@@ -42,7 +47,7 @@ export default class ContactActivitiesView extends JetView {
 			},
 			{
 				id: "DueDate",
-				header: ["Due date", {
+				header: [_("Due date"), {
 					content: "datepickerFilter",
 					compare(value, filter) {
 						value = webix.i18n.dateFormatStr(value);
@@ -57,7 +62,7 @@ export default class ContactActivitiesView extends JetView {
 			{
 				id: "Details",
 				header: [
-					"Details", {
+					_("Details"), {
 						content: "textFilter"
 					}
 				],

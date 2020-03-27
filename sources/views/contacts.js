@@ -5,10 +5,20 @@ import avatarDefault from "../images/avatar_default.png";
 
 export default class ContactsView extends JetView {
 	config() {
+		const _ = this.app.getService("locale")._;
+		const contactsFilter = {
+			view: "text",
+			localId: "contactsFilter",
+			placeholder: _("Type to find matching contacts"),
+			on: {
+				onTimedKeyPress: () => this.contactsFilter()
+			}
+		};
 		const contactsView = {
 			cols: [
 				{
 					rows: [
+						contactsFilter,
 						{
 							view: "list",
 							localId: "contactsList",
@@ -39,7 +49,7 @@ export default class ContactsView extends JetView {
 						{
 							view: "button",
 							localId: "addContactBtn",
-							label: "Add contact",
+							label: _("Add contact"),
 							type: "icon",
 							icon: "mdi mdi-plus-box",
 							css: "white_bgc",
@@ -105,5 +115,25 @@ export default class ContactsView extends JetView {
 	addContact() {
 		this.contactsList.unselectAll();
 		this.show("/top/contacts/contactsData.contactForm");
+	}
+
+	contactsFilter() {
+		const contactFirstFields = ["FirstName", "LastName", "StartDate", "Job", "Company"];
+		const contactsFields = [...contactFirstFields, "Website", "Address", "Email", "Skype", "Phone", "Birthday"];
+
+		const contactsFilterValue = this.$$("contactsFilter").getValue().toLowerCase();
+
+		this.contactsList.filter(contact => contactsFields
+			.some((key) => {
+				let result;
+				if (key === "StartDate" || key === "Birthday") {
+					result = webix.i18n.longDateFormatStr(contact[key])
+						.toLowerCase().indexOf(contactsFilterValue) !== -1;
+				}
+				else {
+					result = contact[key].toLowerCase().indexOf(contactsFilterValue) !== -1;
+				}
+				return result;
+			}));
 	}
 }
