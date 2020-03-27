@@ -23,7 +23,7 @@ export default class TableToolbar extends JetView {
 			editable: true,
 			columns: [
 				{
-					id: "value",
+					id: "Value",
 					header: _("Value"),
 					editor: "text",
 					fillspace: 2
